@@ -4,7 +4,8 @@
 
 #include "Util.h"
 
-#define TOPIC_REMOTE "/OSRailway/remote"
+#define BASE_TOPIC "/OSRailway"
+#define TOPIC_TRAINS_STATUS BASE_TOPIC "/+/status"
 
 /**
  * converts bytes to a String
@@ -21,13 +22,29 @@ String Mqtt::_byte2str(byte* data, unsigned int length) {
   return out;
 }
 
+String Mqtt::_extractTrainName(String topic) {
+  if (topic.startsWith(BASE_TOPIC)) {
+    String end = topic.substring(String(BASE_TOPIC).length() + 1);
+    int nextSlash = end.indexOf("/");
+    String name = end.substring(0, nextSlash);
+    return name;
+  } else {
+    return "";
+  }
+}
+
 void Mqtt::_receiveCallback(char* topic, byte* payload, unsigned int length) {
   String message = Mqtt::_byte2str(payload, length);
   String topicString = String(topic);
 
-  if (topicString.equals(TOPIC_REMOTE)) {
-    Serial.println(TOPIC_REMOTE " called");
-    Serial.println(message);
+  String trainName = Mqtt::_extractTrainName(topicString);
+
+  if (topicString.equals(BASE_TOPIC "/" + trainName + "/status")) {
+    if (length == 0 || message.isEmpty()) {
+      Serial.println("remove");
+    } else {
+      Serial.println("add");
+    }
   }
   return;
 }
@@ -59,7 +76,7 @@ void Mqtt::_reconnect() {
     } else {
       Serial.println("Connected");
       delay(100);
-      this->client.subscribe(TOPIC_REMOTE);
+      this->client.subscribe(TOPIC_TRAINS_STATUS);
     }
   }
 }

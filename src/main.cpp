@@ -12,15 +12,17 @@ const char* hostname = WIFI_HOSTNAME;
 const uint16_t otaPort = OTA_PORT;
 const char* otaPassword = OTA_PASSWD;
 
+Web* web = new Web(ssid, wiFiPassword, hostname, otaPort, otaPassword);
+
+Mqtt* mqtt = new Mqtt();
+
 // it did not work when putting this inside of the display class...
 TFT_eSPI tft = TFT_eSPI(135, 240);
-
-Web* web = new Web(ssid, wiFiPassword, hostname, otaPort, otaPassword);
-Mqtt* mqtt = new Mqtt();
-Display* display = new Display(&tft);
+Display* display = new Display(&tft, mqtt);
 
 void setup() {
   Serial.begin(9600);
+
   web->setup();
   mqtt->setup();
   display->setup();

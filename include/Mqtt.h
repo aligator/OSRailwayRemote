@@ -4,8 +4,6 @@
 #include <PubSubClient.h>
 #include <WiFi.h>
 
-#include <vector>
-
 #include "Arduino.h"
 #include "Web.h"
 #include "config.h"
@@ -30,6 +28,7 @@ class Mqtt {
   void _receiveCallback(char* topic, byte* payload, unsigned int length);
   void _reconnect();
 
+  static String _extractTrainName(String topic);
   static String _byte2str(byte* data, unsigned int length);
 };
 
