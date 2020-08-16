@@ -4,6 +4,7 @@
 #include <TFT_eSPI.h>
 
 #include "Arduino.h"
+#include "Data.h"
 #include "Mqtt.h"
 
 #ifndef TFT_DISPOFF
@@ -28,14 +29,13 @@
 
 class Display {
  public:
-  Display(TFT_eSPI* tft, Mqtt* mqtt);
+  Display(Mqtt* mqtt);
   virtual ~Display();
 
   void setup();
   void loop();
 
  private:
-  TFT_eSPI* tft;  // Invoke custom library
   Mqtt* mqtt;
 
   void _drawList();

@@ -1,5 +1,6 @@
 #include <Arduino.h>
 
+#include "Data.h"
 #include "Display.h"
 #include "Mqtt.h"
 #include "Web.h"
@@ -16,9 +17,7 @@ Web* web = new Web(ssid, wiFiPassword, hostname, otaPort, otaPassword);
 
 Mqtt* mqtt = new Mqtt();
 
-// it did not work when putting this inside of the display class...
-TFT_eSPI tft = TFT_eSPI(135, 240);
-Display* display = new Display(&tft, mqtt);
+Display* display = new Display(mqtt);
 
 void setup() {
   Serial.begin(9600);

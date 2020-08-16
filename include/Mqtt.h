@@ -5,6 +5,7 @@
 #include <WiFi.h>
 
 #include "Arduino.h"
+#include "Data.h"
 #include "Web.h"
 #include "config.h"
 
@@ -15,6 +16,10 @@ class Mqtt {
 
   void setup();
   void loop();
+
+  // I could not put this in main and pass a pointer to Mqtt and Display
+  // as it had some very weird effects...
+  Data data;
 
  private:
   const char* broker = (char*)MQTT_BROKER;

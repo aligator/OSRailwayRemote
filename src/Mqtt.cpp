@@ -41,15 +41,19 @@ void Mqtt::_receiveCallback(char* topic, byte* payload, unsigned int length) {
 
   if (topicString.equals(BASE_TOPIC "/" + trainName + "/status")) {
     if (length == 0 || message.isEmpty()) {
-      Serial.println("remove");
+      data.removeTrain(trainName);
     } else {
-      Serial.println("add");
+      data.addTrain(trainName);
     }
   }
   return;
 }
 
-Mqtt::Mqtt() { this->client = PubSubClient(this->espClient); }
+Mqtt::Mqtt() {
+  this->data = Data();
+  this->client = PubSubClient(this->espClient);
+  this->data = data;
+}
 
 Mqtt::~Mqtt() {}
 
